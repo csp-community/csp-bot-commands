@@ -8,7 +8,7 @@ authors = [{name = "the csp-bot-commands authors", email = "t.paine154@gmail.com
 description = "Miscellaneous commands for csp-bot"
 readme = "README.md"
 license = { text = "Apache-2.0" }
-version = "0.1.0"
+version = "1.0.0"
 requires-python = ">=3.9"
 keywords = [
     "csp",
@@ -61,7 +61,7 @@ Repository = "https://github.com/csp-community/csp-bot-commands"
 Homepage = "https://github.com/csp-community/csp-bot-commands"
 
 [tool.bumpversion]
-current_version = "0.1.0"
+current_version = "1.0.0"
 commit = true
 tag = true
 
