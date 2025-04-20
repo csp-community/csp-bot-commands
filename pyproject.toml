@@ -10,7 +10,13 @@ readme = "README.md"
 license = { text = "Apache-2.0" }
 version = "0.1.0"
 requires-python = ">=3.9"
-keywords = []
+keywords = [
+    "csp",
+    "stream-processing",
+    "slack",
+    "chat",
+    "chatbot",
+]
 
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -25,7 +31,9 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
 ]
 
-dependencies = []
+dependencies = [
+    "csp-bot>=1,<2",
+]
 
 [project.optional-dependencies]
 develop = [
@@ -39,6 +47,11 @@ develop = [
     "twine",
     "uv",
     "wheel",
+    # Command-specific dependencies
+    "lxml",  # mets
+    "pandas",  # mets
+    "tabulate",  # mets
+    "dateparser", # delaytest
 ]
 
 [project.scripts]
@@ -115,4 +128,4 @@ known-first-party = ["csp_bot_commands"]
 section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
 
 [tool.ruff.lint.per-file-ignores]
-"__init__.py" = ["F401"]
+"__init__.py" = ["F401", "F403"]
