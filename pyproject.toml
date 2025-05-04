@@ -112,7 +112,6 @@ packages = ["csp_bot_commands"]
 
 [tool.pytest.ini_options]
 addopts = ["-vvv", "--junitxml=junit.xml"]
-asyncio_mode = "strict"
 testpaths = "csp_bot_commands/tests"
 
 [tool.ruff]
