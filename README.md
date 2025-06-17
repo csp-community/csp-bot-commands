@@ -2,7 +2,7 @@
 
 Miscellaneous commands for csp-bot
 
-[![Build Status](https://github.com/csp-community/csp-bot-commands/actions/workflows/build.yml/badge.svg?branch=main&event=push)](https://github.com/csp-community/csp-bot-commands/actions/workflows/build.yml)
+[![Build Status](https://github.com/csp-community/csp-bot-commands/actions/workflows/build.yaml/badge.svg?branch=main&event=push)](https://github.com/csp-community/csp-bot-commands/actions/workflows/build.yaml)
 [![codecov](https://codecov.io/gh/csp-community/csp-bot-commands/branch/main/graph/badge.svg)](https://codecov.io/gh/csp-community/csp-bot-commands)
 [![License](https://img.shields.io/github/license/csp-community/csp-bot-commands)](https://github.com/csp-community/csp-bot-commands)
 [![PyPI](https://img.shields.io/pypi/v/csp-bot-commands.svg)](https://pypi.python.org/pypi/csp-bot-commands)
