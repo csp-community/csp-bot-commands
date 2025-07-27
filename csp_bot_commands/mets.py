@@ -3,6 +3,8 @@ from typing import Optional, Type
 
 from csp_bot import BaseCommand, BaseCommandModel, BotCommand, Message, ReplyToOtherCommand
 
+log = logging.getLogger(__name__)
+
 try:
     import lxml  # noqa: F401
     import pandas
@@ -10,7 +12,11 @@ try:
     # Required for pandas functions we use
     import tabulate  # noqa: F401
 except ModuleNotFoundError:
+    # If pandas is not installed, we set it to None
     pandas = None
+
+    # Log a warning if pandas is not available
+    log.warning("pandas is not installed, `/mets` commands will not function properly.")
 
 __all__ = (
     "get_stats",
@@ -20,7 +26,6 @@ __all__ = (
     "MetsCommand",
     "MetsCommandModel",
 )
-log = logging.getLogger(__name__)
 
 
 def get_stats():
