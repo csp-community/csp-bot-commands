@@ -1,6 +1,6 @@
 # csp bot commands
 
-Miscellaneous commands for csp-bot
+Miscellaneous commands for [csp-bot](http://github.com/Point72/csp-bot/)
 
 [![Build Status](https://github.com/csp-community/csp-bot-commands/actions/workflows/build.yaml/badge.svg?branch=main&event=push)](https://github.com/csp-community/csp-bot-commands/actions/workflows/build.yaml)
 [![codecov](https://codecov.io/gh/csp-community/csp-bot-commands/branch/main/graph/badge.svg)](https://codecov.io/gh/csp-community/csp-bot-commands)
