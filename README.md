@@ -9,7 +9,6 @@ Miscellaneous commands for [csp-bot](http://github.com/Point72/csp-bot/)
 
 ## Overview
 
-<<<<<<< before updating
 This package contains fun, testing, and utility commands for [csp-bot](http://github.com/Point72/csp-bot/).
 
 | Command      | Type      | Description                                                                                          |
@@ -45,7 +44,5 @@ gateway:
     - _target_: csp_bot_commands.TroutSlapCommandModel
 ```
 
-=======
->>>>>>> after updating
 > [!NOTE]
 > This library was generated using [copier](https://copier.readthedocs.io/en/stable/) from the [Base Python Project Template repository](https://github.com/python-project-templates/base).
