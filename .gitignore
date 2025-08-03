@@ -139,10 +139,13 @@ js/dist
 js/lib
 js/node_modules
 js/*.tgz
+csp_bot_commands/extension
 
 # Jupyter
 .ipynb_checkpoints
 .autoversion
+!csp_bot_commands/extension/csp_bot_commands.json
+!csp_bot_commands/extension/install.json
 csp_bot_commands/nbextension
 csp_bot_commands/labextension
 
