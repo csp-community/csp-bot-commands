@@ -55,6 +55,7 @@ develop = [
     "pandas",  # mets
     "tabulate",  # mets
     "dateparser", # delaytest
+    "csp-adapter-slack", # formatting
 ]
 
 [project.scripts]
