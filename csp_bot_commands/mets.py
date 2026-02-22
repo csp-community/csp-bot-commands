@@ -6,6 +6,7 @@ from csp_bot import BaseCommand, BaseCommandModel, BotCommand, Message, ReplyToO
 log = logging.getLogger(__name__)
 
 try:
+    import html5lib  # noqa: F401
     import lxml  # noqa: F401
     import pandas
 
