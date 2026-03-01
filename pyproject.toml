@@ -91,6 +91,7 @@ branch = true
 omit = [
     "csp_bot_commands/tests/integration/",
 ]
+
 [tool.coverage.report]
 exclude_also = [
     "raise NotImplementedError",
