@@ -7,19 +7,39 @@ from csp_bot import BaseCommand, BaseCommandModel, BotCommand, Message, ReplyToO
 from .common import (
     BEER,
     BUSH,
+    CHUCK_NORRIS,
+    CHURCHILL,
     COCKTAILS,
+    COLORS,
+    COMPLIMENTS,
+    CONFUCIUS,
+    CONSPIRACY,
+    CORPORATE,
+    DAD_JOKES,
     DRINKING_ESTABLISHMENTS,
     DUNE,
     FORTUNE,
     GERMAN,
+    HAIKU,
+    HEMINGWAY,
+    HITCHHIKER,
     ICELANDIC,
+    LATIN,
+    MAGIC8,
+    MOTIVATIONAL,
     NIETZSCHE,
+    PIRATE,
     PRATCHETT,
+    PROGRAMMING_JOKES,
     SHAKEPEREAN_MODIFIERS_ONE,
     SHAKEPEREAN_MODIFIERS_TWO,
     SHAKESPEREAN_NOUNS,
+    SOVIET,
+    STARWARS,
+    STOIC,
     TOLKIEN,
     TWAIN,
+    WHISKEY,
     WILDE,
     WINE,
     YOGI,
@@ -99,6 +119,67 @@ class FunCommand(ReplyToOtherCommand):
         elif "zen" in command.args:
             quote = choice(ZEN)
             message = f'{author} offers {" ".join(target)} a moment of zen: "{quote}"'
+        elif "stoic" in command.args:
+            quote = choice(STOIC)
+            message = f'{author} offers {" ".join(target)} some Stoic counsel: "{quote}"'
+        elif "churchill" in command.args:
+            quote = choice(CHURCHILL)
+            message = f'{author} channels Churchill for {" ".join(target)}: "{quote}"'
+        elif "confucius" in command.args:
+            quote = choice(CONFUCIUS)
+            message = f'{author} shares ancient wisdom with {" ".join(target)}: "Confucius says: {quote}"'
+        elif "starwars" in command.args:
+            quote = choice(STARWARS)
+            message = f'{author} reaches for the Force on behalf of {" ".join(target)}: "{quote}"'
+        elif "hitch" in command.args:
+            quote = choice(HITCHHIKER)
+            message = f'{author} consults the Guide for {" ".join(target)}: "{quote}"'
+        elif "hemingway" in command.args:
+            quote = choice(HEMINGWAY)
+            message = f'{author} pours a drink and quotes Hemingway for {" ".join(target)}: "{quote}"'
+        elif "dad" in command.args:
+            joke = choice(DAD_JOKES)
+            message = f'{author} subjects {" ".join(target)} to a dad joke: "{joke}"'
+        elif "chuck" in command.args:
+            fact = choice(CHUCK_NORRIS)
+            message = f'{author} informs {" ".join(target)} of a Chuck Norris fact: "{fact}"'
+        elif "soviet" in command.args:
+            soviet = choice(SOVIET)
+            message = f'{author} reminds {" ".join(target)}: "{soviet}"'
+        elif "conspiracy" in command.args:
+            theory = choice(CONSPIRACY)
+            message = f'{author} whispers to {" ".join(target)}: "{theory}"'
+        elif "magic8" in command.args:
+            response = choice(MAGIC8)
+            message = f'{author} shakes the Magic 8-Ball for {" ".join(target)}: "\U0001f3b1 {response}"'
+        elif "compliment" in command.args:
+            compliment = choice(COMPLIMENTS)
+            message = f'{author} lavishes praise on {" ".join(target)}: "{compliment}"'
+        elif "latin" in command.args:
+            phrase = choice(LATIN)
+            message = f'{author} schools {" ".join(target)} in Latin: "{phrase}"'
+        elif "pirate" in command.args:
+            taunt = choice(PIRATE)
+            message = f'{author} makes {" ".join(target)} walk the plank: "{taunt}"'
+        elif "corporate" in command.args:
+            buzzword = choice(CORPORATE)
+            message = f'{author} synergizes with {" ".join(target)}: "{buzzword}"'
+        elif "motivational" in command.args:
+            poster = choice(MOTIVATIONAL)
+            message = f'{author} puts a poster on {" ".join(target)}\u2019s wall: "{poster}"'
+        elif "haiku" in command.args:
+            haiku = choice(HAIKU)
+            message = f"{author} composes a haiku for {' '.join(target)}:\n{haiku}"
+        elif "programming" in command.args:
+            joke = choice(PROGRAMMING_JOKES)
+            message = f'{author} shares a programming joke with {" ".join(target)}: "{joke}"'
+        elif "whiskey" in command.args:
+            venue = choice(DRINKING_ESTABLISHMENTS)
+            dram = choice(WHISKEY)
+            message = f'{author} calls {" ".join(target)} over to the {venue} for a dram: "How about {a_or_an(dram)} {dram}?"'
+        elif "highfive" in command.args:
+            color = choice(COLORS)
+            message = f"{author} gives {' '.join(target)} a magnificent {color} high five! \u270b"
         else:
             return None
         return Message(
