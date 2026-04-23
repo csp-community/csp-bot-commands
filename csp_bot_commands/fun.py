@@ -10,8 +10,20 @@ from .common import (
     COCKTAILS,
     DRINKING_ESTABLISHMENTS,
     DUNE,
+    FORTUNE,
     GERMAN,
     ICELANDIC,
+    NIETZSCHE,
+    PRATCHETT,
+    SHAKEPEREAN_MODIFIERS_ONE,
+    SHAKEPEREAN_MODIFIERS_TWO,
+    SHAKESPEREAN_NOUNS,
+    TOLKIEN,
+    TWAIN,
+    WILDE,
+    WINE,
+    YOGI,
+    ZEN,
     a_or_an,
 )
 
@@ -56,6 +68,37 @@ class FunCommand(ReplyToOtherCommand):
         elif "bush" in command.args:
             quote = choice(BUSH)
             message = f'{author} impresses {" ".join(target)} with a quote from George W. Bush: "{quote}"'
+        elif "shakespeare" in command.args:
+            insult = f"Thou {choice(SHAKEPEREAN_MODIFIERS_ONE)} {choice(SHAKEPEREAN_MODIFIERS_TWO)} {choice(SHAKESPEREAN_NOUNS)}!"
+            message = f'{author} hurls a Shakespearean insult at {" ".join(target)}: "{insult}"'
+        elif "yogi" in command.args:
+            quote = choice(YOGI)
+            message = f'{author} shares some Yogi Berra wisdom with {" ".join(target)}: "{quote}"'
+        elif "tolkien" in command.args:
+            quote = choice(TOLKIEN)
+            message = f'{author} offers {" ".join(target)} wisdom from Middle-earth: "{quote}"'
+        elif "fortune" in command.args:
+            quote = choice(FORTUNE)
+            message = f'{author} cracks open a fortune cookie for {" ".join(target)}: "{quote}"'
+        elif "pratchett" in command.args:
+            quote = choice(PRATCHETT)
+            message = f'{author} enlightens {" ".join(target)} with Pratchett: "{quote}"'
+        elif "wilde" in command.args:
+            quote = choice(WILDE)
+            message = f'{author} graces {" ".join(target)} with an Oscar Wilde quip: "{quote}"'
+        elif "wine" in command.args:
+            venue = choice(DRINKING_ESTABLISHMENTS)
+            wine = choice(WINE)
+            message = f'{author} calls {" ".join(target)} over to the {venue} for a glass of wine: "How about {a_or_an(wine)} {wine}?"'
+        elif "nietzsche" in command.args:
+            quote = choice(NIETZSCHE)
+            message = f'{author} darkly enlightens {" ".join(target)} with Nietzsche: "{quote}"'
+        elif "twain" in command.args:
+            quote = choice(TWAIN)
+            message = f'{author} shares a Mark Twain quip with {" ".join(target)}: "{quote}"'
+        elif "zen" in command.args:
+            quote = choice(ZEN)
+            message = f'{author} offers {" ".join(target)} a moment of zen: "{quote}"'
         else:
             return None
         return Message(
