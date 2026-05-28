@@ -147,7 +147,8 @@ class TestMets:
             msg = cmd.execute(
                 BotCommand(
                     backend=backend,
-                    channel="test_channel",
+                    channel_id="test_channel",
+                    channel_name="test_channel",
                     source=User(
                         id="123",
                     ),
@@ -157,12 +158,12 @@ class TestMets:
             )
             assert msg is not None
             assert msg.backend == backend
-            assert msg.channel == "test_channel"
+            assert msg.channel_id == "test_channel"
             if args[0] == "stats":
-                assert "Mets Statistics" in msg.msg
+                assert "Mets Statistics" in msg.content
             elif args[0] == "roster":
-                assert "Mets Roster" in msg.msg
+                assert "Mets Roster" in msg.content
             elif args[0] == "schedule":
-                assert "Mets Schedule" in msg.msg
+                assert "Mets Schedule" in msg.content
             elif args[0] == "standings":
-                assert "League Standings" in msg.msg
+                assert "League Standings" in msg.content

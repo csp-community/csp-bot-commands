@@ -65,8 +65,8 @@ class FunCommand(ReplyToOtherCommand):
 
     def execute(self, command: BotCommand) -> Message | None:
         log.info(f"Fun command: {command}")
-        author = mention_user(command.source.id, command.backend)
-        target = [mention_user(user.id, command.backend) for user in command.targets]
+        author = mention_user(command.source, command.backend)
+        target = [mention_user(user, command.backend) for user in command.targets]
         if not target:
             return
         if "icelandic" in command.args:
@@ -182,7 +182,7 @@ class FunCommand(ReplyToOtherCommand):
         else:
             return None
         return Message(
-            msg=message,
+            content=message,
             channel=command.channel,
             backend=command.backend,
         )

@@ -54,14 +54,14 @@ class DelayTestCommand(ReplyToOtherCommand):
                 message = f"Delay test result: {self._resultmap[command.id].get()}"
                 self._resultmap.pop(command.id)
                 return Message(
-                    msg=message,
+                    content=message,
                     channel=command.channel,
                 )
             else:
                 # reschedule for +5s
                 command.delay = datetime.now(UTC) + timedelta(seconds=5)
                 msg = Message(
-                    msg="All bots are currently assisting other customers, please stay on the line...",
+                    content="All bots are currently assisting other customers, please stay on the line...",
                     channel=command.channel,
                     backend=command.backend,
                 )

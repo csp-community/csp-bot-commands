@@ -6,3 +6,9 @@ from .fun import *
 from .mets import *
 from .thanks import *
 from .trout import *
+
+try:
+    from .ask import *
+    from .summarize import *
+except ImportError:
+    pass

@@ -126,7 +126,7 @@ class MetsCommand(ReplyToOtherCommand):
                 raise NotImplementedError(f"Unsupported backend: {command.backend}")
 
             return Message(
-                msg=message,
+                content=message,
                 channel=command.channel,
                 backend=command.backend,
             )
@@ -137,7 +137,7 @@ class MetsCommand(ReplyToOtherCommand):
             if pandas is None:
                 message += " (pandas not installed)"
             return Message(
-                msg=message,
+                content=message,
                 channel=command.channel,
                 backend=command.backend,
             )

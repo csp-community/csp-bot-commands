@@ -35,10 +35,13 @@ classifiers = [
 ]
 
 dependencies = [
-    "csp-bot>=1,<2",
+    "csp-bot>=1.1,<2",
 ]
 
 [project.optional-dependencies]
+agent = [
+    "csp-bot[agent]",
+]
 develop = [
     "build",
     "bump-my-version",
