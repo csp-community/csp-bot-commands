@@ -29,10 +29,10 @@ class TestThanks:
                     id="123",
                 ),
                 targets=(User(id="456"),),
-                args=args,
+                args=(args,) if isinstance(args, str) else args,
             )
         )
         assert msg is not None
         assert msg.backend == "slack"
         assert msg.channel == "test_channel"
-        assert msg.msg.startswith("<@123> thanks <@456> with")
+        assert msg.msg.startswith("@123 thanks @456 with")
