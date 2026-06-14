@@ -37,4 +37,5 @@ class TestThanks:
         assert msg is not None
         assert msg.backend == "slack"
         assert msg.channel == "test_channel"
-        assert msg.msg.startswith("@123 thanks @456 with")
+        msg_text = msg.msg.replace("<@", "@").replace(">", "")
+        assert msg_text.startswith("@123 thanks @456 with")

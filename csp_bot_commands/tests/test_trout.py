@@ -37,6 +37,7 @@ class TestTroutSlap:
         assert msg is not None
         assert msg.backend == "slack"
         assert msg.channel == "test_channel"
-        assert msg.msg.startswith("@123 slaps @456 with")
+        msg_text = msg.msg.replace("<@", "@").replace(">", "")
+        assert msg_text.startswith("@123 slaps @456 with")
         if args[0] == "trout":
             assert "trout" in msg.msg
