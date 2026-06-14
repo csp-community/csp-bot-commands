@@ -57,6 +57,8 @@ class TestFun:
         ],
     )
     def test_execute(self, args):
+        if isinstance(args, str):
+            args = (args,)
         msg = cmd.execute(
             BotCommand(
                 backend="slack",
@@ -65,7 +67,7 @@ class TestFun:
                     id="123",
                 ),
                 targets=(User(id="456"),),
-                args=(args,) if isinstance(args, str) else args,
+                args=args,
             )
         )
         assert msg is not None
