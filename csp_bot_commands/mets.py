@@ -1,22 +1,22 @@
 import logging
+from html import escape
 
+from chatom import DISCORD_CAPABILITIES, SLACK_CAPABILITIES, TELEGRAM_CAPABILITIES
 from csp_bot import BaseCommand, BaseCommandModel, BotCommand, Message, ReplyToOtherCommand
 
 log = logging.getLogger(__name__)
 
 try:
-    import html5lib  # noqa: F401
-    import lxml  # noqa: F401
     import pandas
-
-    # Required for pandas functions we use
-    import tabulate  # noqa: F401
 except ModuleNotFoundError:
-    # If pandas is not installed, we set it to None
     pandas = None
-
-    # Log a warning if pandas is not available
     log.warning("pandas is not installed, `/mets` commands will not function properly.")
+
+for _optional_dependency in ("html5lib", "lxml", "tabulate"):
+    try:
+        __import__(_optional_dependency)
+    except ModuleNotFoundError:
+        log.warning("%s is not installed, `/mets` commands may not function properly.", _optional_dependency)
 
 __all__ = (
     "MetsCommand",
@@ -26,6 +26,62 @@ __all__ = (
     "get_standings",
     "get_stats",
 )
+
+
+def _chunk_lines(lines: list[str], prefix: str, suffix: str, limit: int, line_len=len, format_chunk=lambda chunk: chunk) -> list[str]:
+    lines = list(lines)
+    available = limit - len(prefix) - len(suffix)
+    chunks: list[str] = []
+    current: list[str] = []
+    current_len = 0
+
+    if not lines:
+        return [f"{prefix}{suffix}"]
+
+    for line in lines:
+        safe_line = line if line_len(line) <= available else line[: max(0, available - 3)] + "..."
+        additional_len = line_len(safe_line) + (1 if current else 0)
+        if current and current_len + additional_len > available:
+            chunks.append("\n".join(current))
+            current = [safe_line]
+            current_len = line_len(safe_line)
+        else:
+            current.append(safe_line)
+            current_len += additional_len
+
+    if current:
+        chunks.append("\n".join(current))
+
+    return [f"{prefix}{format_chunk(chunk)}{suffix}" for chunk in chunks]
+
+
+def _plain_table_messages(kind: str, table: str, limit: int) -> list[str]:
+    return _chunk_lines(table.splitlines(), f"{kind}\n```\n", "\n```", limit)
+
+
+def _telegram_table_messages(kind: str, table: str) -> list[str]:
+    prefix = f"<b>{escape(kind, quote=False)}</b>\n<pre>"
+    suffix = "</pre>"
+    return _chunk_lines(
+        table.splitlines(),
+        prefix,
+        suffix,
+        TELEGRAM_CAPABILITIES.max_message_length,
+        line_len=lambda line: len(escape(line, quote=False)),
+        format_chunk=lambda chunk: escape(chunk, quote=False),
+    )
+
+
+def _response_messages(command: BotCommand, contents: list[str]) -> Message | list[Message]:
+    messages = [
+        Message(
+            content=content,
+            channel=command.channel,
+            backend=command.backend,
+        )
+        for content in contents
+    ]
+    return messages[0] if len(messages) == 1 else messages
 
 
 def get_stats():
@@ -98,7 +154,7 @@ class MetsCommand(ReplyToOtherCommand):
     def help(self) -> str:
         return "Information about the Mets. Syntax: /mets [stats roster schedule standings]"
 
-    def execute(self, command: BotCommand) -> Message | None:
+    def execute(self, command: BotCommand) -> Message | list[Message] | None:
         log.info(f"Mets command: {command}")
 
         try:
@@ -120,16 +176,22 @@ class MetsCommand(ReplyToOtherCommand):
             if command.backend == "symphony":
                 message = message.to_html(index=False).replace('border="1"', "")
                 message = f'<expandable-card state="collapsed"><header>{kind}</header><body variant="default">{message}</body></expandable-card>'
-            elif command.backend == "slack" or command.backend == "discord":
-                message = f"{kind}\n```\n{message.to_markdown(index=False)}\n```"
+                return Message(
+                    content=message,
+                    channel=command.channel,
+                    backend=command.backend,
+                )
+            table = message.to_markdown(index=False, tablefmt="plain")
+            if command.backend == "slack":
+                messages = _plain_table_messages(kind, table, SLACK_CAPABILITIES.max_message_length)
+            elif command.backend == "discord":
+                messages = _plain_table_messages(kind, table, DISCORD_CAPABILITIES.max_message_length)
+            elif command.backend == "telegram":
+                messages = _telegram_table_messages(kind, table)
             else:
                 raise NotImplementedError(f"Unsupported backend: {command.backend}")
 
-            return Message(
-                content=message,
-                channel=command.channel,
-                backend=command.backend,
-            )
+            return _response_messages(command, messages)
         except ValueError:
             # error pulling tables
             log.exception("Error pulling Mets data")

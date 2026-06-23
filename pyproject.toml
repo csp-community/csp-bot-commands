@@ -35,6 +35,7 @@ classifiers = [
 ]
 
 dependencies = [
+    "chatom>=0.2.0",
     "csp-bot>=1.1,<2",
 ]
 

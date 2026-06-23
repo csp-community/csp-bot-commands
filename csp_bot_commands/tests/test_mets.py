@@ -31,15 +31,19 @@ class TestMets:
             (("stats",), "discord"),
             (("stats",), "slack"),
             (("stats",), "symphony"),
+            (("stats",), "telegram"),
             (("roster",), "discord"),
             (("roster",), "slack"),
             (("roster",), "symphony"),
+            (("roster",), "telegram"),
             (("schedule",), "discord"),
             (("schedule",), "slack"),
             (("schedule",), "symphony"),
+            (("schedule",), "telegram"),
             (("standings",), "discord"),
             (("standings",), "slack"),
             (("standings",), "symphony"),
+            (("standings",), "telegram"),
         ],
     )
     def test_execute(self, args, backend):
@@ -156,14 +160,65 @@ class TestMets:
                     args=args,
                 )
             )
-            assert msg is not None
-            assert msg.backend == backend
-            assert msg.channel_id == "test_channel"
+            messages = msg if isinstance(msg, list) else [msg]
+            assert messages[0] is not None
+            assert messages[0].backend == backend
+            assert messages[0].channel_id == "test_channel"
             if args[0] == "stats":
-                assert "Mets Statistics" in msg.content
+                assert "Mets Statistics" in messages[0].content
             elif args[0] == "roster":
-                assert "Mets Roster" in msg.content
+                assert "Mets Roster" in messages[0].content
             elif args[0] == "schedule":
-                assert "Mets Schedule" in msg.content
+                assert "Mets Schedule" in messages[0].content
             elif args[0] == "standings":
-                assert "League Standings" in msg.content
+                assert "League Standings" in messages[0].content
+
+    def test_discord_standings_are_split_under_message_limit(self):
+        standings = pd.DataFrame(
+            [
+                {
+                    "Team": f"T{i:02}",
+                    "Name": f"Very Long Baseball Team Name {i:02}",
+                    "W": 90 - i,
+                    "L": 50 + i,
+                    "PCT": 0.600,
+                    "GB": str(i),
+                    "HOME": "45-25",
+                    "AWAY": "45-25",
+                    "RS": 800 - i,
+                    "RA": 700 + i,
+                    "DIFF": 100 - i,
+                    "STRK": "W1",
+                    "L10": "6-4",
+                }
+                for i in range(30)
+            ]
+        )
+        with patch("csp_bot_commands.mets.get_standings", return_value=standings):
+            msg = cmd.execute(
+                BotCommand(
+                    backend="discord",
+                    channel_id="test_channel",
+                    channel_name="test_channel",
+                    source=User(id="123"),
+                    args=(),
+                )
+            )
+        messages = msg if isinstance(msg, list) else [msg]
+        assert len(messages) > 1
+        assert all(len(message.content) <= 2000 for message in messages)
+
+    def test_telegram_standings_use_html_pre_block(self):
+        with patch("csp_bot_commands.mets.get_standings", return_value=pd.DataFrame([{"Team": "NYM", "Name": "New York Mets"}])):
+            msg = cmd.execute(
+                BotCommand(
+                    backend="telegram",
+                    channel_id="test_channel",
+                    channel_name="test_channel",
+                    source=User(id="123"),
+                    args=(),
+                )
+            )
+        assert not isinstance(msg, list)
+        assert "<b>League Standings</b>" in msg.content
+        assert "<pre>" in msg.content
