@@ -1,4 +1,4 @@
-from csp_bot_commands import *  # noqa
+from csp_bot_commands import *
 
 
 def test_all():

@@ -16,27 +16,13 @@ class TestMets:
         assert cmd.name() == "Mets Information"
         assert cmd.help() == "Information about the Mets. Syntax: /mets [stats roster schedule standings]"
 
-    def test_data_fetch(self):
+    @pytest.mark.parametrize("fetch", [get_roster, get_schedule, get_standings, get_stats])
+    def test_data_fetch(self, fetch):
         try:
-            assert get_roster() is not None
-        except Exception:
-            # Allow errors when data cannot be fetched in CI (network blocked, server error, etc.)
-            pass
-        try:
-            assert get_schedule() is not None
-        except Exception:
-            # Allow errors when data cannot be fetched in CI (network blocked, server error, etc.)
-            pass
-        try:
-            assert get_standings() is not None
-        except Exception:
-            # Allow errors when data cannot be fetched in CI (network blocked, server error, etc.)
-            pass
-        try:
-            assert get_stats() is not None
-        except Exception:
-            # Allow errors when data cannot be fetched in CI (network blocked, server error, etc.)
-            pass
+            result = fetch()
+        except (IndexError, KeyError, OSError, ValueError) as exc:
+            pytest.skip(f"Mets data unavailable: {exc}")
+        assert result is not None
 
     @pytest.mark.parametrize(
         "args,backend",

@@ -1,17 +1,17 @@
 import logging
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from multiprocessing.pool import ThreadPool
 from random import randint
 from time import sleep
-from typing import Optional, Type, Union
+from typing import Union
 
 from csp_bot import BaseCommand, BaseCommandModel, BotCommand, Message, ReplyToOtherCommand
 
 log = logging.getLogger(__name__)
 
 __all__ = (
-    "DelayTestCommandModel",
     "DelayTestCommand",
+    "DelayTestCommandModel",
 )
 
 
@@ -41,10 +41,10 @@ class DelayTestCommand(ReplyToOtherCommand):
         log.critical(f"Testing async bot command: {command}")
         self._resultmap[command.id] = self._threadpool.apply_async(_delay_test)
         # set delay to +5s
-        command.delay = datetime.now() + timedelta(seconds=5)
+        command.delay = datetime.now(UTC) + timedelta(seconds=5)
         return command
 
-    def execute(self, command: BotCommand) -> Optional[Union[Message, "DelayTestCommand"]]:
+    def execute(self, command: BotCommand) -> Union[Message, "DelayTestCommand"] | None:
         log.critical(f"Delaytest command: {command}")
 
         if command.id in self._resultmap:
@@ -59,7 +59,7 @@ class DelayTestCommand(ReplyToOtherCommand):
                 )
             else:
                 # reschedule for +5s
-                command.delay = datetime.now() + timedelta(seconds=5)
+                command.delay = datetime.now(UTC) + timedelta(seconds=5)
                 msg = Message(
                     msg="All bots are currently assisting other customers, please stay on the line...",
                     channel=command.channel,
@@ -69,4 +69,4 @@ class DelayTestCommand(ReplyToOtherCommand):
 
 
 class DelayTestCommandModel(BaseCommandModel):
-    command: Type[BaseCommand] = DelayTestCommand
+    command: type[BaseCommand] = DelayTestCommand
