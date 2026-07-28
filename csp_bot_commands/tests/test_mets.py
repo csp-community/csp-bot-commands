@@ -3,6 +3,7 @@ from unittest.mock import patch
 import pandas as pd
 import pytest
 from csp_bot import BotCommand, User
+from lxml.etree import XMLSyntaxError
 
 from csp_bot_commands.mets import MetsCommand, get_roster, get_schedule, get_standings, get_stats
 
@@ -20,7 +21,7 @@ class TestMets:
     def test_data_fetch(self, fetch):
         try:
             result = fetch()
-        except (IndexError, KeyError, OSError, ValueError) as exc:
+        except (IndexError, KeyError, OSError, ValueError, XMLSyntaxError) as exc:
             pytest.skip(f"Mets data unavailable: {exc}")
         assert result is not None
 
