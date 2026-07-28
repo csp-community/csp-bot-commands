@@ -1,6 +1,5 @@
 import logging
 from random import choice
-from typing import Optional, Type
 
 from csp_bot import BaseCommand, BaseCommandModel, BotCommand, Message, ReplyToOtherCommand, mention_user
 
@@ -14,8 +13,8 @@ from .common import (
 )
 
 __all__ = (
-    "TroutSlapCommandModel",
     "TroutSlapCommand",
+    "TroutSlapCommandModel",
 )
 
 
@@ -32,7 +31,7 @@ class TroutSlapCommand(ReplyToOtherCommand):
     def help(self) -> str:
         return "Slap someone with a wet fish. Syntax: /slap <user> [/channel <channel>]"
 
-    def execute(self, command: BotCommand) -> Optional[Message]:
+    def execute(self, command: BotCommand) -> Message | None:
         log.info(f"Trout command: {command}")
         author = mention_user(command.source.id, command.backend)
         target = [mention_user(user.id, command.backend) for user in command.targets]
@@ -54,4 +53,4 @@ class TroutSlapCommand(ReplyToOtherCommand):
 
 
 class TroutSlapCommandModel(BaseCommandModel):
-    command: Type[BaseCommand] = TroutSlapCommand
+    command: type[BaseCommand] = TroutSlapCommand

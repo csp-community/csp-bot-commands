@@ -1,6 +1,5 @@
 import logging
 from random import choice
-from typing import Optional, Type
 
 from csp_bot import BaseCommand, BaseCommandModel, BotCommand, Message, ReplyToOtherCommand, mention_user
 
@@ -48,8 +47,8 @@ from .common import (
 )
 
 __all__ = (
-    "FunCommandModel",
     "FunCommand",
+    "FunCommandModel",
 )
 log = logging.getLogger(__name__)
 
@@ -64,7 +63,7 @@ class FunCommand(ReplyToOtherCommand):
     def help(self) -> str:
         return ""
 
-    def execute(self, command: BotCommand) -> Optional[Message]:
+    def execute(self, command: BotCommand) -> Message | None:
         log.info(f"Fun command: {command}")
         author = mention_user(command.source.id, command.backend)
         target = [mention_user(user.id, command.backend) for user in command.targets]
@@ -190,4 +189,4 @@ class FunCommand(ReplyToOtherCommand):
 
 
 class FunCommandModel(BaseCommandModel):
-    command: Type[BaseCommand] = FunCommand
+    command: type[BaseCommand] = FunCommand

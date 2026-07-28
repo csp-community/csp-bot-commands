@@ -1,14 +1,13 @@
 import logging
 from random import choice, randint
-from typing import Optional, Type
 
 from csp_bot import BaseCommand, BaseCommandModel, BotCommand, Message, ReplyToOtherCommand, mention_user
 
 from .common import COLORS, MONEY, RANDOM_SINGULAR_NOUNS, a_or_an
 
 __all__ = (
-    "ThanksCommandModel",
     "ThanksCommand",
+    "ThanksCommandModel",
 )
 
 log = logging.getLogger(__name__)
@@ -24,7 +23,7 @@ class ThanksCommand(ReplyToOtherCommand):
     def help(self) -> str:
         return "Thank someone. Syntax: /thanks <user> [/channel <channel>]"
 
-    def execute(self, command: BotCommand) -> Optional[Message]:
+    def execute(self, command: BotCommand) -> Message | None:
         log.info(f"Thanks command: {command}")
         author = mention_user(command.source.id, command.backend)
         target = [mention_user(user.id, command.backend) for user in command.targets]
@@ -47,4 +46,4 @@ class ThanksCommand(ReplyToOtherCommand):
 
 
 class ThanksCommandModel(BaseCommandModel):
-    command: Type[BaseCommand] = ThanksCommand
+    command: type[BaseCommand] = ThanksCommand

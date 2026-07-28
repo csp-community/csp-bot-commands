@@ -1,5 +1,4 @@
 import logging
-from typing import Optional, Type
 
 from csp_bot import BaseCommand, BaseCommandModel, BotCommand, Message, ReplyToOtherCommand
 
@@ -20,12 +19,12 @@ except ModuleNotFoundError:
     log.warning("pandas is not installed, `/mets` commands will not function properly.")
 
 __all__ = (
-    "get_stats",
+    "MetsCommand",
+    "MetsCommandModel",
     "get_roster",
     "get_schedule",
     "get_standings",
-    "MetsCommand",
-    "MetsCommandModel",
+    "get_stats",
 )
 
 
@@ -99,7 +98,7 @@ class MetsCommand(ReplyToOtherCommand):
     def help(self) -> str:
         return "Information about the Mets. Syntax: /mets [stats roster schedule standings]"
 
-    def execute(self, command: BotCommand) -> Optional[Message]:
+    def execute(self, command: BotCommand) -> Message | None:
         log.info(f"Mets command: {command}")
 
         try:
@@ -121,9 +120,7 @@ class MetsCommand(ReplyToOtherCommand):
             if command.backend == "symphony":
                 message = message.to_html(index=False).replace('border="1"', "")
                 message = f'<expandable-card state="collapsed"><header>{kind}</header><body variant="default">{message}</body></expandable-card>'
-            elif command.backend == "slack":
-                message = f"{kind}\n```\n{message.to_markdown(index=False)}\n```"
-            elif command.backend == "discord":
+            elif command.backend == "slack" or command.backend == "discord":
                 message = f"{kind}\n```\n{message.to_markdown(index=False)}\n```"
             else:
                 raise NotImplementedError(f"Unsupported backend: {command.backend}")
@@ -147,4 +144,4 @@ class MetsCommand(ReplyToOtherCommand):
 
 
 class MetsCommandModel(BaseCommandModel):
-    command: Type[BaseCommand] = MetsCommand
+    command: type[BaseCommand] = MetsCommand
