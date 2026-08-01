@@ -21,6 +21,8 @@ class TestTroutSlap:
         ],
     )
     def test_execute(self, args):
+        if isinstance(args, str):
+            args = (args,)
         msg = cmd.execute(
             BotCommand(
                 backend="slack",

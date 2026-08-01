@@ -8,7 +8,6 @@ Reply to the bot's response to continue the conversation.
 """
 
 import logging
-from typing import Type
 
 from csp_bot import BaseCommand, BaseCommandModel, BotCommand
 
@@ -23,8 +22,8 @@ except ImportError:
 log = logging.getLogger(__name__)
 
 __all__ = (
-    "AskCommandModel",
     "AskCommand",
+    "AskCommandModel",
 )
 
 
@@ -89,4 +88,4 @@ else:
 
 
 class AskCommandModel(BaseCommandModel):
-    command: Type[BaseCommand] = AskCommand
+    command: type[BaseCommand] = AskCommand

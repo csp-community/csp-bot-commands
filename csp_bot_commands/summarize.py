@@ -14,7 +14,6 @@ Reply to the bot's response to ask follow-up questions about the summary.
 """
 
 import logging
-from typing import Optional, Type
 
 from csp_bot import BaseCommand, BaseCommandModel, BotCommand
 
@@ -30,12 +29,12 @@ except ImportError:
 log = logging.getLogger(__name__)
 
 __all__ = (
-    "SummarizeCommandModel",
     "SummarizeCommand",
+    "SummarizeCommandModel",
 )
 
 
-def _parse_summarize_args(command: BotCommand) -> tuple[Optional[str], int]:
+def _parse_summarize_args(command: BotCommand) -> tuple[str | None, int]:
     """Parse summarize args into (source_room_name, message_count).
 
     Args are whatever remains after /room has been stripped by the bot.
@@ -43,7 +42,7 @@ def _parse_summarize_args(command: BotCommand) -> tuple[Optional[str], int]:
       - A purely numeric arg → message count
       - A non-numeric arg → source room name
     """
-    source_room: Optional[str] = None
+    source_room: str | None = None
     count = 50
 
     for arg in command.args:
@@ -171,4 +170,4 @@ else:
 
 
 class SummarizeCommandModel(BaseCommandModel):
-    command: Type[BaseCommand] = SummarizeCommand
+    command: type[BaseCommand] = SummarizeCommand

@@ -57,6 +57,8 @@ class TestFun:
         ],
     )
     def test_execute(self, args):
+        if isinstance(args, str):
+            args = (args,)
         msg = cmd.execute(
             BotCommand(
                 backend="slack",
@@ -77,9 +79,7 @@ class TestFun:
             assert msg.content.startswith("<@123> consoles <@456> with an Icelandic folk saying:")
         elif args[0] == "german":
             assert msg.content.startswith("<@123> teaches <@456> some German:")
-        elif args[0] == "cocktail":
-            assert msg.content.startswith("<@123> calls <@456> over to the")
-        elif args[0] == "beer":
+        elif args[0] in ("cocktail", "beer"):
             assert msg.content.startswith("<@123> calls <@456> over to the")
         elif args[0] == "dune":
             assert msg.content.startswith("<@123> scrapes wisdom for <@456> off the sands of Arrakis:")
