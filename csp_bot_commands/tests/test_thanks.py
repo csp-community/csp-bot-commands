@@ -26,7 +26,8 @@ class TestThanks:
         msg = cmd.execute(
             BotCommand(
                 backend="slack",
-                channel="test_channel",
+                channel_id="test_channel",
+                channel_name="test_channel",
                 source=User(
                     id="123",
                 ),
@@ -36,6 +37,5 @@ class TestThanks:
         )
         assert msg is not None
         assert msg.backend == "slack"
-        assert msg.channel == "test_channel"
-        msg_text = msg.msg.replace("<@", "@").replace(">", "")
-        assert msg_text.startswith("@123 thanks @456 with")
+        assert msg.channel_id == "test_channel"
+        assert msg.content.startswith("<@123> thanks <@456> with")

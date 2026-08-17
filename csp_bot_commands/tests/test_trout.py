@@ -26,7 +26,8 @@ class TestTroutSlap:
         msg = cmd.execute(
             BotCommand(
                 backend="slack",
-                channel="test_channel",
+                channel_id="test_channel",
+                channel_name="test_channel",
                 source=User(
                     id="123",
                 ),
@@ -36,8 +37,7 @@ class TestTroutSlap:
         )
         assert msg is not None
         assert msg.backend == "slack"
-        assert msg.channel == "test_channel"
-        msg_text = msg.msg.replace("<@", "@").replace(">", "")
-        assert msg_text.startswith("@123 slaps @456 with")
+        assert msg.channel_id == "test_channel"
+        assert msg.content.startswith("<@123> slaps <@456> with")
         if args[0] == "trout":
-            assert "trout" in msg.msg
+            assert "trout" in msg.content
