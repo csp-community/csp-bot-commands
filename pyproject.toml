@@ -12,7 +12,7 @@ authors = [
 description = "Miscellaneous commands for csp-bot"
 readme = "README.md"
 license = { text = "Apache-2.0" }
-version = "1.0.1"
+version = "2.0.0"
 requires-python = ">=3.11"
 keywords = [
     "csp",
@@ -36,7 +36,7 @@ classifiers = [
 
 dependencies = [
     "chatom>=0.2.0",
-    "csp-bot>=1.1,<2",
+    "csp-bot>=2,<3",
 ]
 
 [project.optional-dependencies]
@@ -74,7 +74,7 @@ Repository = "https://github.com/csp-community/csp-bot-commands"
 Homepage = "https://github.com/csp-community/csp-bot-commands"
 
 [tool.bumpversion]
-current_version = "1.0.1"
+current_version = "2.0.0"
 commit = true
 tag = true
 commit_args = "-s"
