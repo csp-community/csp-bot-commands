@@ -42,12 +42,17 @@ dependencies = [
 [project.optional-dependencies]
 agent = [
     "csp-bot[agent,mcp]",
+    "fastmcp>=2",
     "httpx2>=2,<3",
     "pillow>=11,<13",
+    "pydantic-ai>=2.54",
 ]
 develop = [
+    "csp-bot[agent,mcp]",
+    "fastmcp>=2",
     "httpx2>=2,<3",
     "pillow>=11,<13",
+    "pydantic-ai>=2.54",
     "build",
     "bump-my-version",
     "check-dist",
@@ -56,6 +61,7 @@ develop = [
     "mdformat",
     "mdformat-tables>=1",
     "pytest",
+    "pytest-asyncio",
     "pytest-cov",
     "ruff",
     "twine",
