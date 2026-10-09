@@ -41,6 +41,9 @@ jobs:
       - name: Install dependencies
         run: make develop
 
+      - name: Install merged agent and MCP support
+        run: uv pip install "csp-bot[agent,mcp] @ git+https://github.com/Point72/csp-bot.git@f464a7567e3492d88538dcb1dc761f5aaa844d74"
+
       - name: Lint
         run: make lint
 
