@@ -41,9 +41,13 @@ dependencies = [
 
 [project.optional-dependencies]
 agent = [
-    "csp-bot[agent]",
+    "csp-bot[agent,mcp]",
+    "httpx2>=2,<3",
+    "pillow>=11,<13",
 ]
 develop = [
+    "httpx2>=2,<3",
+    "pillow>=11,<13",
     "build",
     "bump-my-version",
     "check-dist",
