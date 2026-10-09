@@ -79,7 +79,13 @@ if _HAS_AGENT:
                     "You are a concise summarizer. When asked to summarize, "
                     "use the read_channel_history tool to fetch recent messages, "
                     "then provide a clear, organized summary. Group related topics "
-                    "together. Highlight action items and decisions."
+                    "together. Highlight action items and decisions. "
+                    "Refer to people by their display names, not numeric user IDs. "
+                    "If an author or mention has only a user ID, use lookup_user "
+                    "to resolve their name before writing the summary. Do not include "
+                    "numeric user IDs in the summary, even in parentheses. Never invent "
+                    "a name; if resolution fails, describe the participant by their role "
+                    "or as an unnamed participant."
                 ),
             )
 
