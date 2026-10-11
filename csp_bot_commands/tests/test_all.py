@@ -3,6 +3,7 @@ import sys
 from unittest.mock import Mock
 
 import pytest
+from csp_bot import BotCommand
 
 from csp_bot_commands import *
 
@@ -54,7 +55,9 @@ def test_ask_instructions_use_real_file_tools_and_defaults(monkeypatch):
     command = ask.AskCommand()
     monkeypatch.setattr(command, "get_model", lambda: object())
     monkeypatch.setattr(command, "build_toolset", lambda _command: object())
-    command.build_agent(object())
+    assert hasattr(command, "build_agent")
+    assert callable(command.build_agent)
+    command.build_agent(Mock(spec=BotCommand))
     instructions = agent_type.call_args.kwargs["instructions"]
     for term in ("generate_image", "create_file", "read_file", "defaults", "message ID", "Do not fabricate"):
         assert term in instructions
@@ -70,7 +73,9 @@ def test_summarize_instructions_resolve_user_ids(monkeypatch):
     monkeypatch.setattr(command, "get_model", lambda: object())
     monkeypatch.setattr(command, "build_toolset", lambda _command: object())
 
-    command.build_agent(object())
+    assert hasattr(command, "build_agent")
+    assert callable(command.build_agent)
+    command.build_agent(Mock(spec=BotCommand))
 
     instructions = agent_type.call_args.kwargs["instructions"]
     assert "display names" in instructions

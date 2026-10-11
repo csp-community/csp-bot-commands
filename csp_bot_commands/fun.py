@@ -1,7 +1,9 @@
 import logging
 from random import choice
+from typing import cast
 
 from csp_bot import BaseCommand, BaseCommandModel, BotCommand, Message, ReplyToOtherCommand, mention_user
+from csp_bot.utils import Backend
 
 from .common import (
     BEER,
@@ -65,8 +67,8 @@ class FunCommand(ReplyToOtherCommand):
 
     def execute(self, command: BotCommand) -> Message | None:
         log.info(f"Fun command: {command}")
-        author = mention_user(command.source, command.backend)
-        target = [mention_user(user, command.backend) for user in command.targets]
+        author = mention_user(command.source, cast(Backend, command.backend))
+        target = [mention_user(user, cast(Backend, command.backend)) for user in command.targets]
         if not target:
             return
         if "icelandic" in command.args:

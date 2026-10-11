@@ -149,17 +149,20 @@ class TestMets:
                 mock_pandas.read_html.return_value = [pd.DataFrame()]
 
             msg = cmd.execute(
-                BotCommand(
-                    backend=backend,
-                    channel_id="test_channel",
-                    channel_name="test_channel",
-                    source=User(
-                        id="123",
-                    ),
-                    targets=(User(id="456"),),
-                    args=args,
+                BotCommand.model_validate(
+                    {
+                        "backend": backend,
+                        "channel_id": "test_channel",
+                        "channel_name": "test_channel",
+                        "source": User(
+                            id="123",
+                        ),
+                        "targets": (User(id="456"),),
+                        "args": args,
+                    }
                 )
             )
+            assert msg is not None
             messages = msg if isinstance(msg, list) else [msg]
             assert messages[0] is not None
             assert messages[0].backend == backend
@@ -196,14 +199,11 @@ class TestMets:
         )
         with patch("csp_bot_commands.mets.get_standings", return_value=standings):
             msg = cmd.execute(
-                BotCommand(
-                    backend="discord",
-                    channel_id="test_channel",
-                    channel_name="test_channel",
-                    source=User(id="123"),
-                    args=(),
+                BotCommand.model_validate(
+                    {"backend": "discord", "channel_id": "test_channel", "channel_name": "test_channel", "source": User(id="123"), "args": ()}
                 )
             )
+        assert msg is not None
         messages = msg if isinstance(msg, list) else [msg]
         assert len(messages) > 1
         assert all(len(message.content) <= 2000 for message in messages)
@@ -211,14 +211,11 @@ class TestMets:
     def test_telegram_standings_use_html_pre_block(self):
         with patch("csp_bot_commands.mets.get_standings", return_value=pd.DataFrame([{"Team": "NYM", "Name": "New York Mets"}])):
             msg = cmd.execute(
-                BotCommand(
-                    backend="telegram",
-                    channel_id="test_channel",
-                    channel_name="test_channel",
-                    source=User(id="123"),
-                    args=(),
+                BotCommand.model_validate(
+                    {"backend": "telegram", "channel_id": "test_channel", "channel_name": "test_channel", "source": User(id="123"), "args": ()}
                 )
             )
         assert not isinstance(msg, list)
+        assert msg is not None
         assert "<b>League Standings</b>" in msg.content
         assert "<pre>" in msg.content

@@ -85,12 +85,14 @@ def _response_messages(command: BotCommand, contents: list[str]) -> Message | li
 
 
 def get_stats():
+    assert pandas is not None
     dfs = pandas.read_html("https://www.espn.com/mlb/team/stats/_/name/nym/new-york-mets")
     df = pandas.concat(dfs[:2], axis=1)
     return df
 
 
 def get_roster():
+    assert pandas is not None
     dfs = pandas.read_html("https://www.espn.com/mlb/team/roster/_/name/nym/new-york-mets")
     df = pandas.concat(dfs)[["Name", "POS", "BAT", "THW", "Age", "HT", "WT"]]
     df["Name"] = df["Name"].str.replace("\\d+", "")
@@ -98,6 +100,7 @@ def get_roster():
 
 
 def get_schedule():
+    assert pandas is not None
     df = pandas.read_html("https://www.espn.com/mlb/team/schedule/_/name/nym")[0]
     df = df.iloc[1:]
     df.columns = ["Date", "Opponent", "Result", "W-L", "Win", "Loss", "Save", "Att"]
@@ -106,6 +109,7 @@ def get_schedule():
 
 
 def get_standings():
+    assert pandas is not None
     dfs = pandas.read_html("https://www.espn.com/mlb/standings/_/group/overall")
     teams = dfs[0].columns.tolist() + dfs[0].iloc[:, 0].tolist()
     teams = [n.replace("e --", "") for n in teams]

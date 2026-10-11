@@ -59,6 +59,7 @@ develop = [
     "codespell",
     "hatchling",
     "mdformat",
+    "mdformat-frontmatter",
     "mdformat-tables>=1",
     "pytest",
     "pytest-asyncio",
@@ -71,6 +72,7 @@ develop = [
     # Command-specific dependencies
     "html5lib",  # mets
     "lxml",  # mets
+    "types-lxml",
     "pandas",  # mets
     "tabulate",  # mets
     "dateparser", # delaytest
@@ -102,7 +104,7 @@ replace = 'version = "{new_version}"'
 [tool.coverage.run]
 branch = true
 omit = [
-    "csp_bot_commands/tests/integration/",
+    "csp_bot_commands/tests/integration/*",
 ]
 
 [tool.coverage.report]
