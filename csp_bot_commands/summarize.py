@@ -66,7 +66,10 @@ if _HAS_AGENT:
             return "Summarize"
 
         def help(self) -> str:
-            return '/summarize ["Room Name"] [N] — AI summary of the last N messages (default 50)'
+            return "AI summary of the last N messages (default 50)."
+
+        def usage(self) -> str:
+            return '/summarize ["Room Name"] [N]'
 
         def build_agent(self, command: BotCommand) -> Agent:
             toolset = self.build_toolset(command)
@@ -160,7 +163,10 @@ else:
             return "Summarize"
 
         def help(self) -> str:
-            return "/summarize [N] \u2014 AI summary (requires agent extra)"
+            return "AI summary (requires agent extra)."
+
+        def usage(self) -> str:
+            return "/summarize [N]"
 
         def preexecute(self, command: BotCommand) -> BotCommand:
             return command

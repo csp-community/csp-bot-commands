@@ -199,7 +199,10 @@ class GifCommand(AgentCommand):
         return "GIF"
 
     def help(self) -> str:
-        return "/gif <description> - Search and attach a visually reviewed workplace-safe GIF"
+        return "Search and attach a visually reviewed workplace-safe GIF."
+
+    def usage(self) -> str:
+        return "/gif <description>"
 
     def build_prompt(self, command: Any) -> str:
         return " ".join(command.args)

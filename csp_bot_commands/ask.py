@@ -39,7 +39,10 @@ if _HAS_AGENT:
             return "Ask"
 
         def help(self) -> str:
-            return "/ask <question> \u2014 Ask the AI anything (reply to continue)"
+            return "Ask the AI anything (reply to continue)."
+
+        def usage(self) -> str:
+            return "/ask <question>"
 
         def build_agent(self, command: BotCommand) -> Agent:
             return Agent(
@@ -81,7 +84,10 @@ else:
             return "Ask"
 
         def help(self) -> str:
-            return "/ask <question> \u2014 Ask the AI (requires agent extra)"
+            return "Ask the AI (requires agent extra)."
+
+        def usage(self) -> str:
+            return "/ask <question>"
 
         def preexecute(self, command: BotCommand) -> BotCommand:
             return command
