@@ -72,6 +72,7 @@ develop = [
     # Command-specific dependencies
     "html5lib",  # mets
     "lxml",  # mets
+    "types-lxml",
     "pandas",  # mets
     "tabulate",  # mets
     "dateparser", # delaytest

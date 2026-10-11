@@ -3,7 +3,6 @@ from datetime import UTC, datetime, timedelta
 from multiprocessing.pool import ThreadPool
 from random import randint
 from time import sleep
-from typing import Union
 
 from csp_bot import BaseCommand, BaseCommandModel, BotCommand, Message, ReplyToOtherCommand
 
@@ -44,7 +43,7 @@ class DelayTestCommand(ReplyToOtherCommand):
         command.delay = datetime.now(UTC) + timedelta(seconds=5)
         return command
 
-    def execute(self, command: BotCommand) -> Union[Message, "DelayTestCommand"] | None:
+    def execute(self, command: BotCommand) -> Message | list[BotCommand | Message] | None:  # ty: ignore[invalid-method-override]
         log.critical(f"Delaytest command: {command}")
 
         if command.id in self._resultmap:

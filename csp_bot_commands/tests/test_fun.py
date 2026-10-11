@@ -60,15 +60,17 @@ class TestFun:
         if isinstance(args, str):
             args = (args,)
         msg = cmd.execute(
-            BotCommand(
-                backend="slack",
-                channel_id="test_channel",
-                channel_name="test_channel",
-                source=User(
-                    id="123",
-                ),
-                targets=(User(id="456"),),
-                args=args,
+            BotCommand.model_validate(
+                {
+                    "backend": "slack",
+                    "channel_id": "test_channel",
+                    "channel_name": "test_channel",
+                    "source": User(
+                        id="123",
+                    ),
+                    "targets": (User(id="456"),),
+                    "args": args,
+                }
             )
         )
         assert msg is not None
