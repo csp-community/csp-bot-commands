@@ -43,7 +43,7 @@ class DelayTestCommand(ReplyToOtherCommand):
         command.delay = datetime.now(UTC) + timedelta(seconds=5)
         return command
 
-    def execute(self, command: BotCommand) -> Message | list[BotCommand | Message] | None:  # ty: ignore[invalid-method-override]
+    def execute(self, command: BotCommand) -> Message | list[BotCommand | Message] | None:  # ty: ignore[incompatible-method-override]
         log.critical(f"Delaytest command: {command}")
 
         if command.id in self._resultmap:

@@ -9,10 +9,12 @@ pytest.importorskip("csp_bot.commands.agent")
 
 from chatom import Channel, Message, User
 from csp_bot import BotCommand
+from csp_bot.commands.agent import AgentCommand
 from csp_bot.commands.mcp import MCPServerConfig
 from fastmcp import FastMCP
 from pydantic_ai.mcp import MCPToolset
 from pydantic_ai.models.test import TestModel
+from pydantic_ai.tools import Tool
 from pydantic_ai.toolsets import FunctionToolset
 
 from csp_bot_commands.ask import AskCommandModel
@@ -60,7 +62,7 @@ def test_agent_uses_local_and_allowed_remote_tools(model_type, monkeypatch):
     remote.tool(delete_record)
     model = TestModel(call_tools=["knowledge_search"])
     monkeypatch.setattr(command, "get_model", lambda: model)
-    monkeypatch.setattr(command, "build_toolset", lambda _: FunctionToolset(tools=[read_channel_history]))
+    monkeypatch.setattr(command, "build_toolset", lambda _: FunctionToolset(tools=[Tool(read_channel_history, takes_ctx=False)]))
     monkeypatch.setattr(MCPServerConfig, "build_server", lambda _: MCPToolset(remote))
     invocation = BotCommand.model_validate(
         {
@@ -91,7 +93,7 @@ def test_agent_without_mcp_keeps_local_tools(model_type, monkeypatch):
     command = model_type().create_command()
     model = TestModel(call_tools=["read_channel_history"])
     monkeypatch.setattr(command, "get_model", lambda: model)
-    monkeypatch.setattr(command, "build_toolset", lambda _: FunctionToolset(tools=[read_channel_history]))
+    monkeypatch.setattr(command, "build_toolset", lambda _: FunctionToolset(tools=[Tool(read_channel_history, takes_ctx=False)]))
     invocation = BotCommand.model_validate({"command": command.command(), "backend": "slack", "source": User(id="user-1"), "channel_id": "channel-1"})
 
     result = asyncio.run(command.build_agent(invocation).run("Summarize this channel"))
@@ -102,6 +104,7 @@ def test_agent_without_mcp_keeps_local_tools(model_type, monkeypatch):
 
 def test_summarize_requires_chat_backend_even_with_mcp(monkeypatch):
     command = SummarizeCommandModel().create_command()
+    assert isinstance(command, AgentCommand)
     command.mcp_servers = [MCPServerConfig(url="https://tools.example.com/mcp", prefix="knowledge")]
     monkeypatch.setattr(command, "build_toolset", lambda _: None)
     invocation = BotCommand.model_validate({"command": "summarize", "backend": "slack", "source": User(id="user-1"), "channel_id": "channel-1"})
@@ -123,6 +126,7 @@ def test_command_fallback_without_agent_dependencies(module_name, monkeypatch):
         return original_import(name, *args, **kwargs)
 
     monkeypatch.setattr(builtins, "__import__", without_agent)
+    assert module.__file__ is not None
     fallback = runpy.run_path(module.__file__)
     model_name = "AskCommandModel" if module_name == "ask" else "SummarizeCommandModel"
     command = fallback[model_name]().create_command()
