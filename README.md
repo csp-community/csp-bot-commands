@@ -44,5 +44,33 @@ gateway:
     - _target_: csp_bot_commands.TroutSlapCommandModel
 ```
 
+## Agent commands and MCP
+
+Install `csp-bot-commands[agent]` to enable `/ask` and `/summarize`. Both command
+models accept `model_name` and optional `mcp_servers` alongside the local chat
+tools:
+
+```yaml
+_target_: csp_bot_commands.AskCommandModel
+model_name: "anthropic:<model>"
+mcp_servers:
+  - url: https://tools.example.com/mcp
+    prefix: knowledge
+    headers_env:
+      Authorization: KNOWLEDGE_MCP_AUTH
+    tools: [search]
+    timeout: 60
+```
+
+Use `SummarizeCommandModel` for the same configuration on `/summarize`; it still
+requires a connected chat backend to read channel history. Omit `mcp_servers` to
+use only the local tools.
+
+URLs must use HTTPS. `headers_env` maps HTTP headers to environment variables;
+each variable contains the full header value, including `Bearer ` when required.
+`tools` restricts the server tools exposed to the agent, and `prefix` distinguishes
+tools from different servers. Remote servers enforce their own authorization;
+local chat access policies do not apply to external tools.
+
 > [!NOTE]
 > This library was generated using [copier](https://copier.readthedocs.io/en/stable/) from the [Base Python Project Template repository](https://github.com/python-project-templates/base).

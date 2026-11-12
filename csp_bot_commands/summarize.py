@@ -19,7 +19,7 @@ from csp_bot import BaseCommand, BaseCommandModel, BotCommand
 
 try:
     from chatom.agent.toolset import AccessPolicy
-    from csp_bot.commands.agent import AgentCommand
+    from csp_bot.commands.agent import AgentCommand, AgentCommandModel
     from pydantic_ai import Agent
 
     _HAS_AGENT = True
@@ -72,12 +72,11 @@ if _HAS_AGENT:
             return '/summarize ["Room Name"] [N]'
 
         def build_agent(self, command: BotCommand) -> Agent:
-            toolset = self.build_toolset(command)
-            if toolset is None:
+            if self.build_toolset(command) is None:
                 raise RuntimeError(f"No backend available for {command.backend}; cannot read channel history.")
             return Agent(
                 self.get_model(),
-                toolsets=[toolset],
+                toolsets=self.build_toolsets(command),
                 instructions=(
                     "You are a concise summarizer. When asked to summarize, "
                     "use the read_channel_history tool to fetch recent messages, "
@@ -152,6 +151,9 @@ if _HAS_AGENT:
                 header_text = f"Channel summary ({n} messages)"
             return f'<expandable-card state="collapsed"><header><b>{header_text}</b></header><body>{messageml}</body></expandable-card>'
 
+    class SummarizeCommandModel(AgentCommandModel):
+        command: type[AgentCommand] = SummarizeCommand
+
 else:
     from csp_bot import ReplyCommand
 
@@ -180,6 +182,5 @@ else:
                 metadata={"backend": command.backend},
             )
 
-
-class SummarizeCommandModel(BaseCommandModel):
-    command: type[BaseCommand] = SummarizeCommand
+    class SummarizeCommandModel(BaseCommandModel):
+        command: type[BaseCommand] = SummarizeCommand
