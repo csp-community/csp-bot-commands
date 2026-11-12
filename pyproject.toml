@@ -41,14 +41,14 @@ dependencies = [
 
 [project.optional-dependencies]
 agent = [
-    "csp-bot[agent,mcp]",
+    "csp-bot[agent,mcp]>=2.0.3",
     "fastmcp>=2",
     "httpx2>=2,<3",
     "pillow>=11,<14",
     "pydantic-ai>=2.54",
 ]
 develop = [
-    "csp-bot[agent,mcp]",
+    "csp-bot[agent,mcp]>=2.0.3",
     "fastmcp>=2",
     "httpx2>=2,<3",
     "pillow>=11,<14",

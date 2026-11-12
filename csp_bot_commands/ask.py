@@ -12,7 +12,7 @@ import logging
 from csp_bot import BaseCommand, BaseCommandModel, BotCommand
 
 try:
-    from csp_bot.commands.agent import AgentCommand
+    from csp_bot.commands.agent import AgentCommand, AgentCommandModel
     from pydantic_ai import Agent
 
     _HAS_AGENT = True
@@ -72,6 +72,9 @@ if _HAS_AGENT:
         def build_prompt(self, command: BotCommand) -> str:
             return " ".join(command.args) if command.args else "Hello"
 
+    class AskCommandModel(AgentCommandModel):
+        command: type[AgentCommand] = AskCommand
+
 else:
     # Fallback when agent extra is not installed
     from csp_bot import ReplyCommand
@@ -101,6 +104,5 @@ else:
                 metadata={"backend": command.backend},
             )
 
-
-class AskCommandModel(BaseCommandModel):
-    command: type[BaseCommand] = AskCommand
+    class AskCommandModel(BaseCommandModel):
+        command: type[BaseCommand] = AskCommand
