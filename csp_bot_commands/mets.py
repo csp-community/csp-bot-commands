@@ -1,7 +1,7 @@
 import logging
 from html import escape
 
-from chatom import DISCORD_CAPABILITIES, SLACK_CAPABILITIES, TELEGRAM_CAPABILITIES
+from chatom import DISCORD_CAPABILITIES, MATRIX_CAPABILITIES, SLACK_CAPABILITIES, TELEGRAM_CAPABILITIES, ZULIP_CAPABILITIES
 from csp_bot import BaseCommand, BaseCommandModel, BotCommand, Message, ReplyToOtherCommand
 
 log = logging.getLogger(__name__)
@@ -59,14 +59,14 @@ def _plain_table_messages(kind: str, table: str, limit: int) -> list[str]:
     return _chunk_lines(table.splitlines(), f"{kind}\n```\n", "\n```", limit)
 
 
-def _telegram_table_messages(kind: str, table: str) -> list[str]:
+def _html_table_messages(kind: str, table: str, limit: int) -> list[str]:
     prefix = f"<b>{escape(kind, quote=False)}</b>\n<pre>"
     suffix = "</pre>"
     return _chunk_lines(
         table.splitlines(),
         prefix,
         suffix,
-        TELEGRAM_CAPABILITIES.max_message_length,
+        limit,
         line_len=lambda line: len(escape(line, quote=False)),
         format_chunk=lambda chunk: escape(chunk, quote=False),
     )
@@ -191,7 +191,11 @@ class MetsCommand(ReplyToOtherCommand):
             elif command.backend == "discord":
                 messages = _plain_table_messages(kind, table, DISCORD_CAPABILITIES.max_message_length)
             elif command.backend == "telegram":
-                messages = _telegram_table_messages(kind, table)
+                messages = _html_table_messages(kind, table, TELEGRAM_CAPABILITIES.max_message_length)
+            elif command.backend == "zulip":
+                messages = _plain_table_messages(kind, table, ZULIP_CAPABILITIES.max_message_length)
+            elif command.backend == "matrix":
+                messages = _html_table_messages(kind, table, MATRIX_CAPABILITIES.max_message_length)
             else:
                 raise NotImplementedError(f"Unsupported backend: {command.backend}")
 

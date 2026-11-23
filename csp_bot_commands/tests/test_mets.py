@@ -32,18 +32,26 @@ class TestMets:
             (("stats",), "slack"),
             (("stats",), "symphony"),
             (("stats",), "telegram"),
+            (("stats",), "zulip"),
+            (("stats",), "matrix"),
             (("roster",), "discord"),
             (("roster",), "slack"),
             (("roster",), "symphony"),
             (("roster",), "telegram"),
+            (("roster",), "zulip"),
+            (("roster",), "matrix"),
             (("schedule",), "discord"),
             (("schedule",), "slack"),
             (("schedule",), "symphony"),
             (("schedule",), "telegram"),
+            (("schedule",), "zulip"),
+            (("schedule",), "matrix"),
             (("standings",), "discord"),
             (("standings",), "slack"),
             (("standings",), "symphony"),
             (("standings",), "telegram"),
+            (("standings",), "zulip"),
+            (("standings",), "matrix"),
         ],
     )
     def test_execute(self, args, backend):
@@ -219,3 +227,28 @@ class TestMets:
         assert msg is not None
         assert "<b>League Standings</b>" in msg.content
         assert "<pre>" in msg.content
+
+
+def test_zulip_standings_use_a_fenced_block():
+    with patch("csp_bot_commands.mets.get_standings", return_value=pd.DataFrame([{"Team": "NYM", "Name": "New York Mets"}])):
+        msg = MetsCommand().execute(
+            BotCommand.model_validate({"backend": "zulip", "channel_id": "7", "channel_name": "general", "source": User(id="123"), "args": ()})
+        )
+    assert not isinstance(msg, list)
+    assert msg is not None
+    assert msg.content.startswith("League Standings\n```\n")
+    assert msg.content.endswith("\n```")
+
+
+def test_matrix_standings_use_an_escaped_html_pre_block():
+    with patch("csp_bot_commands.mets.get_standings", return_value=pd.DataFrame([{"Team": "NYM", "Name": "Mets <&>"}])):
+        msg = MetsCommand().execute(
+            BotCommand.model_validate(
+                {"backend": "matrix", "channel_id": "!r:example.org", "channel_name": "r", "source": User(id="@u:example.org"), "args": ()}
+            )
+        )
+    assert not isinstance(msg, list)
+    assert msg is not None
+    assert msg.content.startswith("<b>League Standings</b>\n<pre>")
+    assert "Mets &lt;&amp;&gt;" in msg.content
+    assert msg.content.endswith("</pre>")
